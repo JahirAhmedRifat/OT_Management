@@ -1,0 +1,9 @@
+.main{
+    background-image: url('/images/login_img.svg');
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    background-position: center;
+    height:100vh; /* Adjust height */
+    width: 100%; 
+  }
+  

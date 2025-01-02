@@ -1,0 +1,63 @@
+<div class="container-fluid setup rounded">
+    <div class="container-fluid  row">
+        <div class="col-12 my-3 mx-2 rounded title">
+            <h1>OT Completed List</h1>
+        </div>
+    </div>
+    <div class="container-fluid  row">
+        <div class="col-6"></div>
+        <div class="col-6">
+            <div class="row text-center">
+                <div class="col-5">
+                    <input type="date" class="form-control from"  name="fromDate" [(ngModel)]="fromDate">
+                </div>
+                <div class="col-5">
+                    <input type="date" class="form-control to"  name="toDate" [(ngModel)]="toDate">
+                </div>
+                <div  class="col-2">
+                    <button type="submit" class="btn fw-bolder text-light px-3" (click)="searchData()">Search</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid mt-3">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="fs-5">Serial no</th>
+                    <th class="fs-5">Patient Info</th>
+                    <th class="fs-5">Surgeon</th>
+                    <th class="fs-5">Operation Name</th>
+                    <th class="fs-5">Room Assign</th>
+                    <th class="fs-5">Remarks</th>
+                    <!-- <th class="fs-5">Surgery Type</th> -->
+                    <!-- <th class="fs-5">Duration</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of getAllPatientData; let srNo = index">
+                    <td>{{srNo+1}}</td>
+                    <td>
+                        @if(item.gender == "Female"){
+                            <i class="bi bi-gender-female text-danger"></i> {{item.patientName}}<br>
+                            <span class="age">{{item.age}} years</span>
+                        }@else if (item.gender == "Male") {
+                            <i class="bi bi-gender-male text-primary"></i> {{item.patientName}}<br>
+                            <span class="age">{{item.age}} years</span>
+                        }@else{
+                            {{item.patientName}}<br>
+                            <span class="age">{{item.age}} years</span>
+                        }
+                    </td>
+                    <td>{{item.surgeonName}}</td>
+                    <td>{{item.operationName}}</td>
+                    <td>{{item.otRoom}}</td>
+                    <td>{{item.remarks}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- btn btn-outline-danger  /// btn btn-outline-dark fw-bolder-->

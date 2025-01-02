@@ -1,0 +1,86 @@
+<div class="container-fluid main">
+    <div>
+        <nav class="navbar navbar-expand-lg ms-4">
+            <div class="container-fluid mx-3">
+                <a class="navbar-brand">
+                    <img src="/images/loginLogo.svg" alt="logo" width="350" height="90" />
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+    </div>
+    <br /><br /><br /><br /><br />
+    <div class="row ms-5">
+        <div class="col-md-5">
+            <h2 class="fw-bolder">LOGIN HERE</h2>
+            <br />
+            <div>
+                <form #form="ngForm">
+                    <div class="mb-3">
+                        <input type="text" name="userName" #uName="ngModel" [(ngModel)]="username"
+                            class="form-control" placeholder="User Name/Email" required />
+                        <div class="text-danger">
+                            @if((uName.touched || uName.dirty) && uName.errors?.['required']){
+                            <span>Please Enter</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="mb-1 input-group position-relative">
+                        <input  [type]="isPasswordVisible ? 'text' : 'password'" name="password" #uPassword="ngModel" [(ngModel)]="password"
+                            class="form-control" placeholder="Enter Password" required />
+                            <span class="position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"
+                            (click)="togglePasswordVisibility()">
+                            <i class="bi" [ngClass]="isPasswordVisible ? 'bi-eye-slash' : 'bi-eye'"></i>
+                          </span>
+                    </div>
+                    <div class="mb-3 text-danger">
+                        @if((uPassword.touched || uPassword.dirty) && uPassword.errors?.['required']){
+                        <span>Please Enter Password</span>
+                        }
+                    </div>
+                    <button type="button" class="btn btn-primary btn-sm d-block px-5" [disabled]="form.invalid" routerLink="/setup" (click)="onLogin()">
+                        Login
+                    </button>
+                </form>
+            </div>          
+        </div>
+
+        <div class="col-md-7"></div>
+    </div>
+
+    <!-- <div class="row">
+        <div class="col-md-4">
+            <h3 class="text-center text-light">Admin Login </h3>
+            <div>
+                <form>
+                    <div class="bg-warning-subtle p-3 rounded">
+
+                        <div class="mb-3">
+                            <label for="id" class="form-label fw-bolder">Id</label>
+                            <input type="text" class="form-control ps-3" id="id" name="id" [(ngModel)]="id"
+                                placeholder="enter your id">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label fw-bolder">Password</label>
+                            <input type="text" class="form-control " id="password" name="password"
+                                [(ngModel)]="password" placeholder="enter your password">
+                        </div>
+
+                    </div>
+
+                    <button type="submit"
+                        class="btn btn-primary text-white d-block px-5  m-auto fw-bolder mt-2">Login</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+
+        </div>
+    </div> -->
+</div>

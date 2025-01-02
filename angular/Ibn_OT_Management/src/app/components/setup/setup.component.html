@@ -1,0 +1,144 @@
+<div class="container-fluid setup rounded">
+    <div class="container-fluid  row">
+        <div class="col-12 my-3 mx-2 rounded title">
+            <h1>Setup</h1>
+        </div>
+    </div>
+    <div class="container-fluid  row">
+        <div class="col-6">
+            <h4>OT Room Management</h4>
+        </div>
+        <div class="col-6">
+            <button type="submit" class="btn btn-sm fs-5 d-block fw-bolder addbtn text-white" data-bs-toggle="modal"
+                data-bs-target="#exampleModal">Add Room</button>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-3">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="fs-4">S/N</th>
+                    <th class="fs-4">Room ID</th>
+                    <th class="fs-4">Room Name</th>
+                    <th class="fs-4">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of getAllData; let srNo= index">
+                    <td>{{srNo+1}}</td>
+                    <td>{{item.roomId}}</td>
+                    <td>{{item.roomName}}</td>
+                    <td>
+                        <button type="button" class=" mt-1 me-2 border-0" (click)="update(item.id)"
+                            data-bs-toggle="modal" data-bs-target="#exampleModalUpdate"><i
+                                class="bi bi-pencil-square"></i></button>
+                        <button type="button" class="mt-1 border-0 " (click)="deleteData(item.id)"><i
+                                class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-------------------- Modal --------------------------------------->
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: rgb(245, 247, 248);">
+            <div class="container-fluid  row">
+                <div class="col-12 mt-3 mx-2 mb-2 rounded title">
+                    <h4 class="text-center">Add Room</h4>
+                </div>
+            </div>
+            <div class="mx-2">
+                <div class="row">
+                    <form #form="ngForm">
+                        <div class="my-2">
+                            <label for="roomId" class="form-label fw-bolder">Room ID</label>
+                            <input type="text" class="form-control" [(ngModel)]="roomId" #rId="ngModel" name="roomId"
+                                placeholder="Enter Room ID" required>
+                            <div class="text-danger">
+                                @if((rId.touched || rId.dirty) && rId.errors?.['required']){
+                                <span>It's Required</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="roomName" class="form-label fw-bolder">Room Name</label>
+                            <input type="text" class="form-control" [(ngModel)]="roomName" #rName="ngModel"
+                                name="roomName" placeholder="Enter Room Name" required>
+                            <div class="text-danger">
+                                @if((rName.touched || rName.dirty) && rName.errors?.['required']){
+                                <span>It's Required</span>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- <div class="mb-3">
+                            <label for="status" class="form-label fw-bolder">Status</label>
+                            <select class="form-select">
+                                <option selected>--Status--</option>
+                                <option value="1">Waiting</option>
+                                <option value="2">In Surgery</option>
+                                <option value="3">Recovery</option>
+                            </select>
+                        </div> -->
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-secondary fw-bolder" style="width: 100%;"
+                                    (click)="clear()">Clear
+                                    Fields</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-success fw-bolder" style="width: 100%;"
+                                    data-bs-dismiss="modal" [disabled]="form.invalid" (click)="addroom()">Add
+                                    Room</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ------------------------------------- Data Update --------------------------- -->
+
+<div class="modal fade" id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: rgb(245, 247, 248);">
+            <div class="container-fluid  row">
+                <div class="col-12 mt-3 mx-2 mb-2 rounded title">
+                    <h4 class="text-center">Room Update</h4>
+                </div>
+            </div>
+            <div class="mx-2">
+                <div class="row">
+                    <form>
+                        <div class="my-2">
+                            <label for="getRoomId" class="form-label fw-bolder">Room ID</label>
+                            <input type="text" class="form-control" [(ngModel)]="getRoomId" name="getRoomId"
+                                id="getRoomId">
+                        </div>
+                        <div class="mb-3">
+                            <label for="getRoomName" class="form-label fw-bolder">Room Name</label>
+                            <input type="text" class="form-control" [(ngModel)]="getRoomName" name="getRoomName"
+                                id="getRoomName">
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-success fw-bolder d-block m-auto"
+                                    style="width: 40%;" data-bs-dismiss="modal" (click)="roomUpdate()">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

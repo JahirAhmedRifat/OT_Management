@@ -1,0 +1,250 @@
+<div class="container-fluid setup rounded">
+    <div class="container-fluid  row">
+        <div class="col-12 my-3 mx-2 rounded title">
+            <h1>Patient Queue Management</h1>
+        </div>
+    </div>
+
+    <div class="container-fluid  row">
+        <div class="col-6">
+            <h4>Patient Serial Entry</h4>
+        </div>
+        <div class="col-6">
+            <button type="submit" class="btn fw-bolder btn-sm  d-block fs-5 text-light new" routerLink="/patient"
+                data-bs-toggle="modal" data-bs-target="#exampleModal">New Patient
+                Serial</button>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-3">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="fs-5">Serial no</th>
+                    <th class="fs-5">Patient Info</th>
+                    <th class="fs-5">Surgeon</th>
+                    <th class="fs-5">Operation Name</th>
+                    <th class="fs-5">Room Assign</th>
+                    <th class="fs-5">Status</th>
+                    <th class="fs-5">Remarks</th>
+                    <th class="fs-5">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of getAllPatientData; let srNo = index">
+                    <td>{{srNo+1}}</td>
+                    <td>
+                        @if(item.gender == "Female"){
+                            <i class="bi bi-gender-female text-danger"></i> {{item.patientName}}<br>
+                            <span class="age">{{item.age}} years</span>
+                        }@else if (item.gender == "Male") {
+                            <i class="bi bi-gender-male text-primary"></i> {{item.patientName}}<br>
+                            <span class="age">{{item.age}} years</span>
+                        }@else{
+                            {{item.patientName}}<br>
+                            <span class="age">{{item.age}} years</span>
+                        }
+                    </td>
+                    <td>{{item.surgeonName}}</td>
+                    <td>{{item.operationName}}</td>
+                    <td>{{item.otRoom}}</td>
+                    <td>{{item.status}}</td>
+                    <td>{{item.remarks}}</td>
+                    <td>
+                        @if(item.flag == "OP" ){
+                          <button type="button" class="me-2 rounded btn btn-warning px-4 btn-sm fw-bolder" (click)="updateFlag(item.id,'OI')">OP</button>
+                        }@else if(item.flag == "OI"){
+                            <button type="button" class="me-2 rounded btn btn-primary px-4 btn-sm fw-bolder" (click)="updateFlag(item.id,'OC')">OI</button>
+                        }@else if(item.flag == "OC"){
+                            <button type="button" class="me-2 rounded btn btn-success px-4 btn-sm fw-bolder" (click)="updateFlag(item.id,'OO')">OC</button>
+                        }
+                        <button type="button" class=" mt-2 me-2 border border-success rounded px-3" (click)="findById(item.id)"
+                            data-bs-toggle="modal" data-bs-target="#exampleModalUpdate"><i
+                                class="bi bi-pencil-square"></i></button> 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--------------- add patient Modal part ---------------- -->
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl rounded">
+        <div class="modal-content" style="background-color: rgb(231, 239, 245);">
+            <div class="container-fluid  row">
+                <div class="col-12 mt-3 mx-2 mb-2 rounded title">
+                    <h4 class="fw-bolder">New Patient Serial</h4>
+                </div>
+            </div>
+            <div class="mx-2 mt-3">
+                <div class="row">
+                    <form #form="ngForm">
+                        <div class="row">
+                            <div class="col-md-4 mb-2 mt-2">
+                                <label for="patientName" class="form-label fw-bolder">Patient Name</label>
+                                <input type="text" class="form-control" [(ngModel)]="patientName" name="patientName"
+                                    placeholder="Enter Patient Name" #pName="ngModel" required>
+                                <div class="text-danger">
+                                    @if((pName.touched || pName.dirty) && pName.errors?.['required']){
+                                    <span>It's required</span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2 mt-2">
+                                <label for="gender" class="form-label fw-bolder">Gender</label>
+                                <select class="form-select" [(ngModel)]="gender" name="gender" id="gender">
+                                    <option selected>--Status--</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                                <!-- <input type="text" class="form-control text" [(ngModel)]="gender" name="gender" id="gender"> -->
+                            </div>
+                            <div class="col-md-4 mb-2 mt-2">
+                                <label for="age" class="form-label fw-bolder">Age</label>
+                                <input type="text" class="form-control" [(ngModel)]="age" name="age" id="age"
+                                    placeholder="Please Patient Age">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-2 mt-2">
+                                <label for="surgeonName" class="form-label fw-bolder">Surgeon Name</label>
+                                <input type="text" class="form-control" [(ngModel)]="surgeonName" name="surgeonName"
+                                    placeholder="Enter Surgeon Name" #surgName="ngModel" required>
+                                <div class="text-danger">
+                                    @if((surgName.touched || surgName.dirty) && surgName.errors?.['required']){
+                                    <span>It's required</span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-2 mt-2">
+                                <label for="operationName" class="form-label fw-bolder">Operation Name</label>
+                                <input type="text" class="form-control" [(ngModel)]="operationName" name="operationName"
+                                    placeholder="Enter Operation Name" #opName="ngModel" required>
+                                <div class="text-danger">
+                                    @if((opName.touched || opName.dirty) && opName.errors?.['required']){
+                                    <span>It's required</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3 mt-2">
+                                <label for="otRoomAssign" class="form-label fw-bolder">OT Room Assign</label>
+                                <select class="form-select" [(ngModel)]="otRoom" name="otRoom"
+                                    id="otRoom">
+                                    <option *ngFor="let room of getAllRoom" [value]="room.roomId">
+                                        {{ room.roomId }}
+                                      </option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3 mt-2">
+                                <label for="status" class="form-label fw-bolder">Status</label>
+                                <input type="text" class="form-control" [(ngModel)]="status" name="status" id="status">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="remarks" class="form-label fw-bolder">Remarks</label>
+                            <input type="text" class="form-control" [(ngModel)]="remarks" name="remarks" id="remarks"
+                                placeholder="Enter Remarks">
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-secondary fw-bolder" style="width:100%;"
+                                    (click)="clear()">Clear
+                                    Fields</button>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-success fw-bolder" style="width: 100%;" [disabled]="form.invalid"
+                                    (click)="addPatientSerial()" data-bs-dismiss="modal">Add Serial
+                                    No.</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------- Update Modal part ---------------- -->
+
+<div class="modal fade" id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl rounded">
+        <div class="modal-content" style="background-color: rgb(231, 239, 245);">
+            <div class="container-fluid  row">
+                <div class="col-12 mt-3 mx-2 mb-2 rounded title">
+                    <h4 class="fw-bolder">Update Patient Serial</h4>
+                </div>
+            </div>
+            <div class="mx-2 mt-3">
+                <div class="row">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-4 mb-2 mt-2">
+                                <label for="getPatientName" class="form-label fw-bolder">Patient Name</label>
+                                <input type="text" class="form-control" [(ngModel)]="getPatientName" name="getPatientName" id="getPatientName">
+                            </div>
+                            <div class="col-md-4 mb-2 mt-2">
+                                <label for="getGender" class="form-label fw-bolder">Gender</label>
+                                <select class="form-select" [(ngModel)]="getGender" name="getGender" id="getGender">
+                                    <option selected>--Status--</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                                <!-- <input type="text" class="form-control text" [(ngModel)]="getGender" name="getGender" id="getGender"> -->
+                            </div>
+                            <div class="col-md-4 mb-2 mt-2">
+                                <label for="getAge" class="form-label fw-bolder">Age</label>
+                                <input type="text" class="form-control" [(ngModel)]="getAge" name="getAge" id="getAge">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-2 mt-2">
+                                <label for="getSurgeonName" class="form-label fw-bolder">Surgeon Name</label>
+                                <input type="text" class="form-control" [(ngModel)]="getSurgeonName" name="getSurgeonName" id="getSurgeonName">                                    
+                            </div>
+                            <div class="col-md-6 mb-2 mt-2">
+                                <label for="getOperationName" class="form-label fw-bolder">Operation Name</label>
+                                <input type="text" class="form-control" [(ngModel)]="getOperationName" name="getOperationName" id="getOperationName">                                  
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3 mt-2">
+                                <label for="getOtRoomAssign" class="form-label fw-bolder">OT Room Assign</label>
+                                <select class="form-select" [(ngModel)]="otRoom" name="otRoom" id="otRoom">                                
+                                    <option *ngFor="let room of getAllRoom" [value]="room.roomId">
+                                        {{ room.roomId }}
+                                      </option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3 mt-2">
+                                <label for="getStatus" class="form-label fw-bolder">Status</label>
+                                <input type="text" class="form-control" [(ngModel)]="getStatus" name="getStatus" id="getStatus">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="getRemarks" class="form-label fw-bolder">Remarks</label>
+                            <input type="text" class="form-control" [(ngModel)]="getRemarks" name="getRemarks" id="getRemarks">                               
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4">
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <button type="submit" class="btn btn-secondary fw-bolder me-2" style="width: 30%;"
+                                data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-success fw-bolder" style="width: 30%;"
+                                    data-bs-dismiss="modal" (click)="updatePatientSerial()">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
